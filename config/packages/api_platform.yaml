@@ -1,0 +1,14 @@
+api_platform:
+    show_webby: false
+    title: "JWT_3 : Un forum sécurisé par Token JWT"
+    description: "Inspired by the 'symf_forum' created with Twig"
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header

@@ -1,0 +1,37 @@
+database create , .env, install_composer
+make:user 
+composer require lexik/jwt-authentication-bundle
+php bin/console lexik:jwt:generate-keypair
+composer require api
+make:entity Category ( nom => string, nb_subCat => int) / Declared as an API Resource
+** migrations **
+config/packages/api_platform: show_webby: false
+config/routes/api_platform:    prefix: /forum
+packages/security.yaml : access_control sur les paths de category ( IS_AUTHENTICATED_FULLY)
+packages/security.yaml : firewall login / firewall forum
+config/routes.yaml : login_check
+make:controller
+composer require orm-fixtures --dev
+ATTENTION: le mot de passe doit bien être encodé. 
+ATTENTION: un seul provider -> celui de doctrine. on active jwt avec:
+
+api:
+    pattern: ^/api/
+    stateless: true
+    jwt: ~
+
+voir capture d'écran du 03/09 pour le security.yaml
+
+recopié les make:entity de symf_forum + cascades + ManyToOne
+security.yaml : mise à jour de access_control .. 
+creation endpoint pour s'enregistrer : /register POST
+    -> on utilise le /user sur POST.
+    -> il faut ensuite hasher le password avec hash de symfony
+    -> passer une clé pour être admin, sinon par défaut c'est un user
+    -> utilisation d'un data persister
+
+customisation de la réponse JSON lors d'une demande de clé JWT, voir :
+    confih/service.yaml
+    App\EventListener\AuthenticationSuccessListener
+
+    -> on retourne maintenant un { data : { nom: '' prenom : ''}}
